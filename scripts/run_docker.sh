@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
 ## Complete the following steps to get Docker running locally
+
 docker stop capstone-project
 docker image  rm capstone-project
 docker image rmi capstone-project
 # Step 1:
 # Build image and add a descriptive tag
- docker build --tag=capstone-project .
+cd ..
+docker build --tag=capstone-project .
 # Step 2: 
 # List docker images
 docker images --all

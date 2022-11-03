@@ -94,9 +94,22 @@ jobs:
       - run:
           name: Build webapp image
           command: |
-            ./scripts/run_docker.sh           
-      
-             
+            ./scripts/run_docker.sh
+
+      - run:
+          name: Upload webapp image
+          command: |
+            ./scripts/upload_docker.sh    
+
+    build-eks-cluster:
+      docker:
+      - image: circleci/node:13.8.0      
+      steps:
+        - checkout
+        - run:
+            name: Initial EKS cluster
+            command: |
+              ./scripts/create_eks.sh  
   
   
 
