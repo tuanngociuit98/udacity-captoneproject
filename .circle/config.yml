@@ -1,0 +1,142 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.1
+  kubernetes: circleci/kubernetes@1.3.1
+  aws-eks: circleci/aws-eks@2.2.0
+  docker: circleci/docker@2.1.4
+
+
+parameters:
+  workflow_id:
+    type: string
+    default: '${CIRCLE_WORKFLOW_ID:0:7}'
+
+commands:
+  aws-ready:
+    description: Install AWS CLI
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            sudo pip install --upgrade pip
+
+  destroy-environment:
+    description: Destroy NETWORK & EKS CLUSTER cloudformation 
+    parameters:
+      when:
+        type: string   
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack \
+            --stack-name n-Capstone-Network-<< pipeline.parameters.workflow_id >>
+  
+
+jobs:
+  lint-code: 
+    docker:
+      - image: circleci/python:3.6.7-stretch
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make install
+            pip install -r requirements.txt
+            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+            sudo chmod +x /bin/hadolint
+      - run:
+          name: install       
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+        
+      # run tests!
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            make test
+      # run lints!
+      - run:
+          name: run lint
+          command: |
+            . venv/bin/activate
+            make lint
+
+  build-project-image:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [project-build]
+      - run:
+          name: Build webapp image
+          command: |
+            ./scripts/run_docker.sh           
+      
+             
+  
+  
+
+  
+
+  # deploy-app:
+  #   docker: 
+  #     - image: 
+
+  # build-infrastructure:
+  #   docker:
+  #     - image: circleci/python:3.6.7-stretch
+  #   working_directory: ~/repo
+    
+  #   steps:
+  #     - checkout
+  #     - restore_cache:
+  #         keys:
+  #         - v1-dependencies-{{ checksum "requirements.txt" }}
+  #         # fallback to using the latest cache if no exact match is found
+  #         - v1-dependencies-
+  #     - aws-ready
+
+  #     - run:
+  #         name: Build Infrastructure
+  #         command: |
+  #           cd ./cloudformation/
+  #           sh create.sh VietNguyen-Capstone-Network-<< pipeline.parameters.workflow_id >> infrastructure.yml params-infra.json
+
+  #     - destroy-environment:
+  #         when: on_fail 
+
+  
+
+      
+workflows:
+  default:
+    jobs:
+      - lint-code
+      - build-project-image:
+         requires: [lint-code]
+      # - build-infrastructure
+     
