@@ -81,12 +81,12 @@ jobs:
       - run:
           name: Build webapp image
           command: |
-            ./scripts/run_docker.sh
+            ../run_docker.sh
 
       - run:
           name: Upload webapp image
           command: |
-            ./scripts/upload_docker.sh    
+            ../upload_docker.sh    
 
     build-eks-cluster:
       docker:
@@ -96,7 +96,7 @@ jobs:
         - run:
             name: Initial EKS cluster
             command: |
-              ./scripts/create_eks.sh  
+              ../create_eks.sh  
   
   
 
