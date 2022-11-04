@@ -89,7 +89,7 @@ jobs:
             docker login registry-1.docker.io -u 00375877633 -p dckr_pat_kdkaGhZmbNGk2NnoHbf5vqxRDc0
             docker tag capstone-project $dockerpath
             docker tag capstone-project:latest $dockerpath:latest
-            # docker push $dockerpath
+            docker push 00375877633/udacity:latest
   #   build-eks-cluster:
   #     docker:
   #     - image: circleci/node:13.8.0      
@@ -102,7 +102,7 @@ jobs:
   
   
 
-  
+
 
   # deploy-app:
   #   docker: 
