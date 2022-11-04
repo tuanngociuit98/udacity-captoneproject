@@ -80,7 +80,7 @@ jobs:
       - run:
           name: Build webapp image
           command: |
-             ls
+             sudo systemctl status docker
              docker build --tag=capstone-project .
              docker images --all
       
