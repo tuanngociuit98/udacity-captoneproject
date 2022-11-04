@@ -107,7 +107,7 @@ jobs:
           name: docker login
           command: |
               docker login docker.io -u 00375877633 -p tuanngoc123
-                
+
       - kubernetes/install:
           kubectl-version: v1.22.0
       - aws-eks/update-kubeconfig-with-authenticator:
@@ -159,7 +159,7 @@ workflows:
       - lint-code
       - build-project-image:
          requires: [lint-code]
-      - deploy-k8s:
+      - deploy-application:
          requires: [lint-code, build-project-image]
          cluster-name: Udacity-Capstone
      
