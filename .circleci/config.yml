@@ -80,7 +80,7 @@ jobs:
       - run:
           name: Build webapp image
           command: |
-             cd ..
+             cd /home/
              docker build --tag=capstone-project .
              docker images --all
              docker run -p 8080:80 capstone-project
@@ -90,6 +90,7 @@ jobs:
       - run:
           name: Upload webapp image
           command: |
+
             dockerpath=00375877633/udacity
             echo "Docker ID and Image: ${dockerpath}"
             docker login registry-1.docker.io -u 00375877633 -p dckr_pat_kdkaGhZmbNGk2NnoHbf5vqxRDc0
