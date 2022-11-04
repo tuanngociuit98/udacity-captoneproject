@@ -100,17 +100,17 @@ jobs:
           docker_layer_caching: true
       
       - run:
-        name: install eksctl
-        command: |  
-          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-          mv /tmp/eksctl /usr/local/bin
-      # - run:
-      #   name: build eks cluster
-      #   command: |
-      #     echo "create new key-pair"
-      #     aws ec2 create-key-pair --key-name k8s-demo --query 'KeyMaterial' --output text> k8s-demo.pem
-      #     echo "build eks cluster"
-      #     eksctl create cluster --name k8s-demo --region us-east-1 --nodegroup-name k8s-demo --nodes 2 --node-type=t2.medium --ssh-access --ssh-public-key k8s-demo --managed
+         name: install eksctl
+          command: |  
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            mv /tmp/eksctl /usr/local/bin
+      - run:
+          name: build eks cluster
+          command: |
+           echo "create new key-pair"
+           aws ec2 create-key-pair --key-name k8s-demo --query 'KeyMaterial' --output text> k8s-demo.pem
+            echo "build eks cluster"
+            eksctl create cluster --name k8s-demo --region us-east-1 --nodegroup-name k8s-demo --nodes 2 --node-type=t2.medium --ssh-access --ssh-public-key k8s-demo --managed
   
 
   
