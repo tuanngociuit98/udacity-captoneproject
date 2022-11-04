@@ -155,5 +155,5 @@ workflows:
       - build-project-image:
          requires: [lint-code]
       - deploy-k8s:
-         requires: [lint-code, deploy-k8s]
+         requires: [lint-code, build-project-image]
      
