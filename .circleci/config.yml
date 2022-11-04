@@ -91,7 +91,7 @@ jobs:
             docker tag capstone-project:latest $dockerpath:latest
             docker push 00375877633/udacity:latest
 
-    deploy-application:
+  deploy-application:
     docker:
       - image: circleci/python:3.6.7-stretch
   
