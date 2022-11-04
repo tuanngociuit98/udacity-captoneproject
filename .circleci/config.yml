@@ -115,9 +115,11 @@ jobs:
           cluster-name: << parameters.cluster-name >>
           aws-region: us-east-1
           install-kubectl: true
-      - kubernetes/create-or-update-resource:
-          show-kubectl-command: true
-          resource-file-path: deploy/deploy.yml
+
+      - run:
+          name: deploy yml
+          command: |
+            kubectl apply -f deploy.yml
 
   
   
