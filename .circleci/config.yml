@@ -76,11 +76,13 @@ jobs:
       - image: circleci/python:3.6.7-stretch
     steps:
       - checkout
-      
+      - setup_remote_docker:
+          docker_layer_caching: true
+
       - run:
           name: Build webapp image
           command: |
-             systemctl status docker
+             
              docker build --tag=capstone-project .
              docker images --all
       
