@@ -80,6 +80,7 @@ jobs:
       - run:
           name: Build webapp image
           command: |
+             ls
              cd /home/
              docker build --tag=capstone-project .
              docker images --all
