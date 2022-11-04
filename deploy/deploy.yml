@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone-project-deploy
+  labels:
+    app: capstoneapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: capstoneapp
+  template:
+    metadata:
+      name: capstoneapp
+      labels:
+        app: capstoneapp
+    spec:
+      containers:
+        - name: capstone-project
+          image: 00375877633/udacity:latest
+          ports: 
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone-project-service
+spec:
+  selector:
+    app: capstoneapp
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
