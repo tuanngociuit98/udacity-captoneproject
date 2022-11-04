@@ -91,12 +91,13 @@ jobs:
             docker tag capstone-project:latest $dockerpath:latest
             docker push 00375877633/udacity:latest
 
-  deploy-application:
+  deploy-k8s:
     docker:
       - image: circleci/python:3.6.7-stretch
-  
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       
       - run:
         name: install eksctl
@@ -110,7 +111,7 @@ jobs:
           aws ec2 create-key-pair --key-name k8s-demo --query 'KeyMaterial' --output text> k8s-demo.pem
           echo "build eks cluster"
           eksctl create cluster --name k8s-demo --region us-east-1 --nodegroup-name k8s-demo --nodes 2 --node-type=t2.medium --ssh-access --ssh-public-key k8s-demo --managed
-
+  
 
   
   
@@ -153,6 +154,6 @@ workflows:
       - lint-code
       - build-project-image:
          requires: [lint-code]
-      - deploy-application:
-         requires: [lint-code]
+      - deploy-k8s:
+         requires: [lint-code, deploy-k8s]
      
