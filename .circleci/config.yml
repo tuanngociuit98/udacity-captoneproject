@@ -80,14 +80,21 @@ jobs:
       - run:
           name: Build webapp image
           command: |
-            
-            ./run_docker.sh
+             cd ..
+             docker build --tag=capstone-project .
+             docker images --all
+             docker run -p 8080:80 capstone-project
+
+
 
       - run:
           name: Upload webapp image
           command: |
-            ./upload_docker.sh    
-
+            dockerpath=00375877633/udacity
+            echo "Docker ID and Image: ${dockerpath}"
+            docker login registry-1.docker.io -u 00375877633 -p dckr_pat_kdkaGhZmbNGk2NnoHbf5vqxRDc0
+            docker tag capstone-project $dockerpath
+            docker push $dockerpath
   #   build-eks-cluster:
   #     docker:
   #     - image: circleci/node:13.8.0      
