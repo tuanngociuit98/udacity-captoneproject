@@ -136,7 +136,7 @@ workflows:
   default:
     jobs:
       - lint-code
-      # - build-project-image:
-      #    requires: [lint-code]
+      - build-project-image:
+         requires: [lint-code]
       # # - build-infrastructure
      
