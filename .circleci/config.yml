@@ -83,10 +83,7 @@ jobs:
              ls
              docker build --tag=capstone-project .
              docker images --all
-             docker run -p 8080:80 capstone-project
-
-
-
+      
       - run:
           name: Upload webapp image
           command: |
