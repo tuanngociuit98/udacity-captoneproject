@@ -90,15 +90,33 @@ jobs:
             docker tag capstone-project $dockerpath
             docker tag capstone-project:latest $dockerpath:latest
             docker push 00375877633/udacity:latest
-  #   build-eks-cluster:
-  #     docker:
-  #     - image: circleci/node:13.8.0      
-  #     steps:
-  #       - checkout
-  #       - run:
-  #           name: Initial EKS cluster
-  #           command: |
-  #             ../create_eks.sh  
+
+    deploy-application:
+    docker:
+      - image: circleci/python:3.6.7-stretch
+    parameters:
+      cluster-name:
+        description: |
+          Name of the EKS cluster
+        type: string
+    steps:
+      - checkout
+      - kubernetes/install:
+          kubectl-version: v1.22.0
+      - run:
+        name: install eksctl
+        command: |  
+          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+      - run:
+        name: build eks cluster
+        command: |
+          echo "create new key-pair"
+          aws ec2 create-key-pair --key-name k8s-demo --query 'KeyMaterial' --output text> k8s-demo.pem
+          echo "build eks cluster"
+          eksctl create cluster --name k8s-demo --region us-east-1 --nodegroup-name k8s-demo --nodes 2 --node-type=t2.medium --ssh-access --ssh-public-key k8s-demo --managed
+
+
   
   
 
@@ -140,5 +158,6 @@ workflows:
       - lint-code
       - build-project-image:
          requires: [lint-code]
-      # # - build-infrastructure
+      - deploy-application:
+         requires: [lint-code]
      
