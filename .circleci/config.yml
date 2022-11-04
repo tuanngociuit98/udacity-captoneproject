@@ -73,7 +73,7 @@ jobs:
 
   build-project-image:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/python:3.6.7-stretch
     steps:
       - checkout
       
