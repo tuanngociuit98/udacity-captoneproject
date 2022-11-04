@@ -12,7 +12,7 @@ dockerpath=00375877633/udacity
 echo "Docker ID and Image: ${dockerpath}"
 docker login registry-1.docker.io -u 00375877633 -p dckr_pat_kdkaGhZmbNGk2NnoHbf5vqxRDc0
 
-docker tag udacity-project4 $dockerpath
+docker tag capstone-project $dockerpath
 
 # Step 3:
 # Push image to a docker repository
