@@ -71,22 +71,22 @@ jobs:
             . venv/bin/activate
             make lint
 
-  # build-project-image:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys: [project-build]
-  #     - run:
-  #         name: Build webapp image
-  #         command: |
-  #           ../run_docker.sh
+  build-project-image:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      
+      - run:
+          name: Build webapp image
+          command: |
+            
+            ./run_docker.sh
 
-  #     - run:
-  #         name: Upload webapp image
-  #         command: |
-  #           ../upload_docker.sh    
+      - run:
+          name: Upload webapp image
+          command: |
+            ./upload_docker.sh    
 
   #   build-eks-cluster:
   #     docker:
