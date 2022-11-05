@@ -128,7 +128,7 @@ jobs:
       - run:
           name: deploy yml
           command: |
-            kubectl apply -f deploy.yml
+            kubectl apply -f deploy/deploy.yml
 
 
 
