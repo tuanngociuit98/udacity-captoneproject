@@ -111,18 +111,25 @@ jobs:
       - kubernetes/install:
           kubectl-version: v1.22.0
        
+      - run:
+          name: docker login
+          command: |
+              docker login docker.io -u 00375877633 -p tuanngoc123
+
+      - kubernetes/install:
+          kubectl-version: v1.22.0
+      - aws-eks/create-cluster:
+          cluster-name: << parameters.cluster-name >>
+
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
           aws-region: us-east-1
           install-kubectl: true
-
+  
       - run:
           name: deploy yml
           command: |
             kubectl apply -f deploy.yml
-
-  
-  
 
 
 
